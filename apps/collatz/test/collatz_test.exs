@@ -21,4 +21,10 @@ defmodule CollatzTest do
       assert Collatz.stream(3) |> Enum.to_list == [10,5,16,8,4,2,1]
     end
   end
+
+  describe "Collatz.max_cycles_for" do
+    test "when max value == 10" do
+      assert Collatz.max_cycles_for(10) == 9
+    end
+  end
 end
