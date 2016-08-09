@@ -1,6 +1,15 @@
 defmodule Collatz do
 
+  # TODO: Make a proper working graph that reuses existing branches
   def graph(max) do
+    cycle_until(max, fn(number, accumulator) ->
+      cond do
+        rem(number, 2) == 0 ->
+          IO.write("#{number}\n|\nv\n#{accumulator}")
+        true ->
+          IO.write("#{number} -> #{accumulator}\n")
+      end
+    end)
   end
 
   def max_cycles_for(max) do
@@ -9,7 +18,11 @@ defmodule Collatz do
     end) |> Enum.max_by(fn(cn) -> elem(cn, 1) end) |> elem(0)
   end
 
-  def stream(initial_number, fun \\ &callback/2) do
+  def stream(initial_number) do
+    Collatz.stream(initial_number, &Collatz.callback/2)
+  end
+
+  def stream(initial_number, fun) do
     Stream.resource(
       fn -> initial_number end,
       fn(current_number) ->
@@ -22,6 +35,10 @@ defmodule Collatz do
       end,
       fn(number) -> number end
     )
+  end
+
+  def callback(number, accumulator) do
+    {number, accumulator}
   end
 
   defp divide_by_two_or_halt(number, fun) do
@@ -42,17 +59,13 @@ defmodule Collatz do
 
   defp cycle_until(max, fun) do
     2..max |> Enum.map(fn(cycle) ->
-      Collatz.stream(cycle, fun)
+      Collatz.stream(cycle, fun) |> Stream.run
     end)
   end
 
   defp cycles_for(max, reducer) do
     2..max |> Enum.map(fn(cycle) ->
-      {cycle, Collatz.stream(cycle) |> reducer.()}
+      {cycle, Collatz.stream(cycle, &Collatz.callback/2) |> reducer.()}
     end)
-  end
-
-  defp callback(number, accumulator) do
-    {number, accumulator}
   end
 end
