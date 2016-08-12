@@ -8,15 +8,9 @@ defmodule Mergesort do
     list
   end
   defp divide(list) do
-    l = length(list)
-    q = Float.floor(l / 2) |> trunc
-    left = Enum.slice(list, 0, q)
-    right = Enum.slice(list, q, l)
+    {left, right} = Enum.split(list, div(length(list), 2))
 
-    left = divide(left)
-    right = divide(right)
-
-    merge([], left, right)
+    merge([], divide(left), divide(right))
   end
 
   defp merge(sorted, left, right) when length(left) == 0 and length(right) == 0 do
