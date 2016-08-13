@@ -17,12 +17,12 @@ defmodule BinaryHeap do
     h
   end
 
-  def insert(%__MODULE{list: list} = heap, element) when length(list) == 0 do
+  def push(%__MODULE{list: list} = heap, element) when length(list) == 0 do
     list = [element]
     Map.merge(heap, %{list: list})
   end
 
-  def insert(%__MODULE{list: list} = heap, element) when length(list) > 0 do
+  def push(%__MODULE{list: list} = heap, element) when length(list) > 0 do
     new_list = list ++ [element]
     new_heap = Map.merge(heap, %{list: new_list})
     heapify(new_heap, length(new_list) - 1)
