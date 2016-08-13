@@ -13,6 +13,10 @@ defmodule BinaryHeap do
     new(type: :max)
   end
 
+  def root(%__MODULE{list: [h | _]}) do
+    h
+  end
+
   def insert(%__MODULE{list: list} = heap, element) when length(list) == 0 do
     list = [element]
     Map.merge(heap, %{list: list})
@@ -51,18 +55,24 @@ defmodule BinaryHeap do
   defp min_parent_check(%__MODULE{list: list} = heap, element, parent) do
     parentv = Enum.at(list, parent)
     elementv = Enum.at(list, element)
+    p = get_comparator(parentv)
+    e = get_comparator(elementv)
+
     cond do
-      parentv < elementv -> heap
-      parentv > elementv -> do_swap(heap, element, parent)
+      p < e -> heap
+      p > e -> do_swap(heap, element, parent)
     end
   end
 
   defp max_parent_check(%__MODULE{list: list} = heap, element, parent) do
     parentv = Enum.at(list, parent)
     elementv = Enum.at(list, element)
+    p = get_comparator(parentv)
+    e = get_comparator(elementv)
+
     cond do
-      parentv > elementv -> heap
-      parentv < elementv -> do_swap(heap, element, parent)
+      p > e -> heap
+      p < e -> do_swap(heap, element, parent)
     end
   end
 
@@ -75,6 +85,14 @@ defmodule BinaryHeap do
     case parent do
       0 -> new_heap
       _ -> parent_check(new_heap, parent, parent_i(parent))
+    end
+  end
+
+  defp get_comparator(value) do
+    case value do
+      value when is_integer(value) -> value
+      {index, _} when is_integer(index) -> index
+      _ -> nil
     end
   end
 end
