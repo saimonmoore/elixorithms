@@ -23,6 +23,20 @@ defmodule Graph do
     end
   end
 
+  def remove_edge(%__MODULE{type: t} = graph, i, j) do
+    case t do
+      :adj_list -> AdjacencyList.remove_edge(%__MODULE{type: t} = graph, i, j)
+      :adj_matrix -> AdjacencyMatrix.remove_edge(%__MODULE{type: t} = graph, i,j)
+    end
+  end
+
+  def has_edge(%__MODULE{type: t} = graph, i, j) do
+    case t do
+      :adj_list -> AdjacencyList.has_edge(%__MODULE{type: t} = graph, i, j)
+      :adj_matrix -> AdjacencyMatrix.has_edge(%__MODULE{type: t} = graph, i,j)
+    end
+  end
+
   defp new_adjacency_list do
     Graph.AdjacencyList.new
   end

@@ -24,14 +24,14 @@ defmodule GraphTest do
   end
 
   describe "AdjacencyList" do
-    test "addVertex", %{adj_list: graph} do
+    test "add_vertex", %{adj_list: graph} do
       g = Graph.add_vertex(graph, @elements[:lefkosia])
       outlist = g.graph.outlist
       {_, attributes} = outlist[0]
       assert attributes == @elements[:lefkosia]
     end
 
-    test "addEdge", %{adj_list: graph} do
+    test "add_edge", %{adj_list: graph} do
       g_with_vertices = Graph.add_vertex(graph, @elements[:lefkosia])
       |>  Graph.add_vertex(@elements[:lemesos])
       |>  Graph.add_vertex(@elements[:larnaca])
@@ -43,6 +43,47 @@ defmodule GraphTest do
       {edge_list, _} = outlist[0]
       assert edge_list[0][:ref] == {0,3}
       assert edge_list[0][:attributes] == %{}
+
+      inlist = g.graph.inlist
+      {edge_list, _} = inlist[3]
+      assert edge_list[0][:ref] == {3,0}
+      assert edge_list[0][:attributes] == %{}
+    end
+
+    test "remove_edge", %{adj_list: graph} do
+      g_with_vertices = Graph.add_vertex(graph, @elements[:lefkosia])
+      |>  Graph.add_vertex(@elements[:lemesos])
+      |>  Graph.add_vertex(@elements[:larnaca])
+      |>  Graph.add_vertex(@elements[:paphos])
+      |>  Graph.add_edge(0, 2)
+      |>  Graph.add_edge(2, 3)
+
+      g = Graph.remove_edge(g_with_vertices, 0, 2)
+
+      {edges, _} = g.graph.outlist[0]
+      assert !Enum.any?(edges, fn(edge) ->
+        edge.ref == {0, 2}
+      end)
+
+    {edges, _} = g.graph.inlist[2]
+      assert !Enum.any?(edges, fn(edge) ->
+        edge.ref == {2, 0}
+      end)
+    end
+
+    test "has_edge", %{adj_list: graph} do
+      g = Graph.add_vertex(graph, @elements[:lefkosia])
+      |>  Graph.add_vertex(@elements[:lemesos])
+      |>  Graph.add_vertex(@elements[:larnaca])
+      |>  Graph.add_vertex(@elements[:paphos])
+      |>  Graph.add_edge(0, 2)
+      |>  Graph.add_edge(2, 3)
+      |>  Graph.add_edge(1, 3)
+
+      assert Graph.has_edge(g, 0,2)
+      assert Graph.has_edge(g, 2,3)
+      assert Graph.has_edge(g, 1,3)
+      assert !Graph.has_edge(g, 0,1)
     end
   end
 end

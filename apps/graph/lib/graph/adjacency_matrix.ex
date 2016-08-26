@@ -6,10 +6,18 @@ defmodule Graph.AdjacencyMatrix do
   end
 
   def add_vertex(%__MODULE{graph: g} = graph, element) do
-    IO.inspect("#{inspect g} #{inspect graph} #{inspect element}")
+    IO.inspect("TODO: Implement me #{inspect g} #{inspect graph} #{inspect element}")
   end
 
   def add_edge(graph, i, j, attributes \\ %{}) do
-    IO.inspect("#{inspect graph} #{i} #{j} #{inspect attributes}")
+    IO.inspect("TODO: Implement me #{inspect graph} #{i} #{j} #{inspect attributes}")
+  end
+
+  def remove_edge(graph, i, j) do
+    IO.inspect("TODO: Implement me #{inspect graph} #{i} #{j}")
+  end
+
+  def has_edge(graph, i, j) do
+    IO.inspect("TODO: Implement me #{inspect graph} #{i} #{j}")
   end
 end
