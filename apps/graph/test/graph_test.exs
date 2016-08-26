@@ -46,7 +46,7 @@ defmodule GraphTest do
 
       inlist = g.graph.inlist
       {edge_list, _} = inlist[3]
-      assert edge_list[0][:ref] == {3,0}
+      assert edge_list[0][:ref] == {0,3}
       assert edge_list[0][:attributes] == %{}
     end
 
@@ -65,9 +65,9 @@ defmodule GraphTest do
         edge.ref == {0, 2}
       end)
 
-    {edges, _} = g.graph.inlist[2]
+      {edges, _} = g.graph.inlist[2]
       assert !Enum.any?(edges, fn(edge) ->
-        edge.ref == {2, 0}
+        edge.ref == {0, 2}
       end)
     end
 
@@ -84,6 +84,35 @@ defmodule GraphTest do
       assert Graph.has_edge(g, 2,3)
       assert Graph.has_edge(g, 1,3)
       assert !Graph.has_edge(g, 0,1)
+    end
+
+    test "out_edges", %{adj_list: graph} do
+      g = Graph.add_vertex(graph, @elements[:lefkosia])
+      |>  Graph.add_vertex(@elements[:lemesos])
+      |>  Graph.add_vertex(@elements[:larnaca])
+      |>  Graph.add_vertex(@elements[:paphos])
+      |>  Graph.add_edge(0, 1)
+      |>  Graph.add_edge(0, 2)
+      |>  Graph.add_edge(1, 3)
+
+      assert Enum.map(Graph.out_edges(g, 0), fn(edge) ->
+        edge.ref
+      end) == [{0,1}, {0,2}]
+    end
+
+    test "in_edges", %{adj_list: graph} do
+      g = Graph.add_vertex(graph, @elements[:lefkosia])
+      |>  Graph.add_vertex(@elements[:lemesos])
+      |>  Graph.add_vertex(@elements[:larnaca])
+      |>  Graph.add_vertex(@elements[:paphos])
+      |>  Graph.add_edge(0, 1)
+      |>  Graph.add_edge(0, 2)
+      |>  Graph.add_edge(1, 3)
+      |>  Graph.add_edge(3, 0)
+
+      assert Enum.map(Graph.in_edges(g, 0), fn(edge) ->
+        edge.ref
+      end) == [{3,0}]
     end
   end
 end

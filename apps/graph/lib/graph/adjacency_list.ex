@@ -31,6 +31,16 @@ defmodule Graph.AdjacencyList do
     is_edge_in_outlist(graph, i, j)
   end
 
+  def out_edges(%__MODULE{graph: g}, i) do
+    {out_edges, _} = g[:outlist][i]
+    out_edges
+  end
+
+  def in_edges(%__MODULE{graph: g}, i) do
+    {in_edges, _} = g[:inlist][i]
+    in_edges
+  end
+
   defp add_edge_to_outlist(%__MODULE{graph: g}, i, j, attributes) do
     {ol, vertex} = g[:outlist][i]
     ol_edge = %{ref: {i,j}, attributes: attributes}
@@ -39,7 +49,7 @@ defmodule Graph.AdjacencyList do
 
   defp add_edge_to_inlist(%__MODULE{graph: g}, i, j, attributes) do
     {il, vertex} = g[:inlist][j]
-    il_edge = %{ref: {j,i}, attributes: attributes}
+    il_edge = %{ref: {i,j}, attributes: attributes}
     Array.set(g[:inlist], j, {append_to_array(il, il_edge), vertex})
   end
 
@@ -55,7 +65,7 @@ defmodule Graph.AdjacencyList do
 
   defp remove_edge_from_inlist(%__MODULE{graph: g}, i, j) do
     {il, vertex} = g[:inlist][j]
-    edge = Enum.find_index(il, fn(edge) -> edge[:ref] == {j,i} end)
+    edge = Enum.find_index(il, fn(edge) -> edge[:ref] == {i,j} end)
 
     cond do
       is_number(edge) -> Array.set(g[:inlist], j, {Array.reset(il, edge) |> Array.resize, vertex})

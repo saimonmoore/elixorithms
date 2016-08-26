@@ -37,6 +37,20 @@ defmodule Graph do
     end
   end
 
+  def out_edges(%__MODULE{type: t} = graph, i) do
+    case t do
+      :adj_list -> AdjacencyList.out_edges(%__MODULE{type: t} = graph, i)
+      :adj_matrix -> AdjacencyMatrix.out_edges(%__MODULE{type: t} = graph, i)
+    end
+  end
+
+  def in_edges(%__MODULE{type: t} = graph, i) do
+    case t do
+      :adj_list -> AdjacencyList.in_edges(%__MODULE{type: t} = graph, i)
+      :adj_matrix -> AdjacencyMatrix.in_edges(%__MODULE{type: t} = graph, i)
+    end
+  end
+
   defp new_adjacency_list do
     Graph.AdjacencyList.new
   end

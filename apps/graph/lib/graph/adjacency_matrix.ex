@@ -20,4 +20,12 @@ defmodule Graph.AdjacencyMatrix do
   def has_edge(graph, i, j) do
     IO.inspect("TODO: Implement me #{inspect graph} #{i} #{j}")
   end
+
+  def out_edges(%__MODULE{graph: g}, i) do
+    IO.inspect("TODO: Implement me #{inspect g} #{i}")
+  end
+
+  def in_edges(%__MODULE{graph: g}, i) do
+    IO.inspect("TODO: Implement me #{inspect g} #{i}")
+  end
 end
